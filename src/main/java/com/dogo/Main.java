@@ -1,5 +1,9 @@
 package com.dogo;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 /**
  * author       : jangdoyun
  * date         : 25. 3. 11.
@@ -11,6 +15,22 @@ package com.dogo;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+
+        String dogo = "JANGDOYUN";
+        System.out.println("정답:" + solution(dogo));
+    }
+
+    /**
+     * 시간 : min
+     * URL :
+     * 제목 :
+     * 문제 :
+     * 제한사항 :
+     * @param dogo
+     * @return
+     */
+    public static String solution(String dogo) {
+        int answer = 0;
+        return dogo;
     }
 }
