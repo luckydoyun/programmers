@@ -1,5 +1,9 @@
 package com.dogo;
 
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * author       : jangdoyun
  * date         : 25. 3. 11.
@@ -31,10 +35,19 @@ public class Lessons64061 {
      * 시간 : 60 min
      * URL : https://school.programmers.co.kr/learn/courses/30/lessons/64061
      * 제목 : 크레인 인형뽑기 게임
-     * 문제 : 게임 화면은 "1 x 1" 크기의 칸들로 이루어진 "N x N" 크기의 정사각 격자이며 위쪽에는 크레인이 있고 오른쪽에는 바구니가 있습니다. (위 그림은 "5 x 5" 크기의 예시입니다). 각 격자 칸에는 다양한 인형이 들어 있으며 인형이 없는 칸은 빈칸입니다. 모든 인형은 "1 x 1" 크기의 격자 한 칸을 차지하며 격자의 가장 아래 칸부터 차곡차곡 쌓여 있습니다. 게임 사용자는 크레인을 좌우로 움직여서 멈춘 위치에서 가장 위에 있는 인형을 집어 올릴 수 있습니다. 집어 올린 인형은 바구니에 쌓이게 되는 데, 이때 바구니의 가장 아래 칸부터 인형이 순서대로 쌓이게 됩니다. 다음 그림은 [1번, 5번, 3번] 위치에서 순서대로 인형을 집어 올려 바구니에 담은 모습입니다.
-     * 크레인 작동 시 인형이 집어지지 않는 경우는 없으나 만약 인형이 없는 곳에서 크레인을 작동시키는 경우에는 아무런 일도 일어나지 않습니다. 또한 바구니는 모든 인형이 들어갈 수 있을 만큼 충분히 크다고 가정합니다. (그림에서는 화면표시 제약으로 5칸만으로 표현하였음)
-     *
-     * 게임 화면의 격자의 상태가 담긴 2차원 배열 board와 인형을 집기 위해 크레인을 작동시킨 위치가 담긴 배열 moves가 매개변수로 주어질 때, 크레인을 모두 작동시킨 후 터트려져 사라진 인형의 개수를 return 하도록 solution 함수를 완성해주세요.
+     * 문제 :
+     * 게임 화면은 "1 x 1" 크기의 칸들로 이루어진 "N x N" 크기의 정사각 격자이며 위쪽에는 크레인이 있고 오른쪽에는 바구니가 있습니다. (위 그림은 "5 x 5" 크기의 예시입니다).
+     * 각 격자 칸에는 다양한 인형이 들어 있으며 인형이 없는 칸은 빈칸입니다.
+     * 모든 인형은 "1 x 1" 크기의 격자 한 칸을 차지하며 격자의 가장 아래 칸부터 차곡차곡 쌓여 있습니다.
+     * 게임 사용자는 크레인을 좌우로 움직여서 멈춘 위치에서 가장 위에 있는 인형을 집어 올릴 수 있습니다.
+     * 집어 올린 인형은 바구니에 쌓이게 되는 데, 이때 바구니의 가장 아래 칸부터 인형이 순서대로 쌓이게 됩니다.
+     * 다음 그림은 [1번, 5번, 3번] 위치에서 순서대로 인형을 집어 올려 바구니에 담은 모습입니다.
+     * 크레인 작동 시 인형이 집어지지 않는 경우는 없으나 만약 인형이 없는 곳에서 크레인을 작동시키는 경우에는 아무런 일도 일어나지 않습니다.
+     * 또한 바구니는 모든 인형이 들어갈 수 있을 만큼 충분히 크다고 가정합니다. (그림에서는 화면표시 제약으로 5칸만으로 표현하였음)
+     * <p>
+     * 게임 화면의 격자의 상태가 담긴 2차원 배열 board와 인형을 집기 위해 크레인을 작동시킨 위치가 담긴 배열 moves가 매개변수로 주어질 때,
+     * 크레인을 모두 작동시킨 후 터트려져 사라진 인형의 개수를 return 하도록 solution 함수를 완성해주세요.
+     * <p>
      * 제한사항 :
      * board 배열은 2차원 배열로 크기는 "5 x 5" 이상 "30 x 30" 이하입니다.
      * board의 각 칸에는 0 이상 100 이하인 정수가 담겨있습니다.
@@ -42,7 +55,7 @@ public class Lessons64061 {
      * 1 ~ 100의 각 숫자는 각기 다른 인형의 모양을 의미하며 같은 숫자는 같은 모양의 인형을 나타냅니다.
      * moves 배열의 크기는 1 이상 1,000 이하입니다.
      * moves 배열 각 원소들의 값은 1 이상이며 board 배열의 가로 크기 이하인 자연수입니다.
-     *
+     * <p>
      * [[0,0,0,0,0],[0,0,1,0,3],[0,2,5,0,1],[4,2,4,4,2],[3,5,1,3,1]]	[1,5,3,5,1,2,1,4]	4
      *
      * @param
@@ -50,6 +63,61 @@ public class Lessons64061 {
      */
     public static int solution(int[][] board, int[] moves) {
         int answer = 0;
+
+        // "N x N" 크기의 정사각 격자이므로, 크레인은 1 ~ N 칸 중 하나의 칸에서 인형을 뽑는다.
+        // step 1. 각 칸에 존재하는 인형들을 (N칸, 인형들)으로 map 자료형으로 관리한다.
+        Map<Integer, ArrayDeque> dollBoard = new HashMap<>();
+        dollInit(board, dollBoard);
+
+//        System.out.println("시작 dollBoard:" + dollBoard);
+
+        // 크레인으로 뽑은 인형
+        ArrayDeque<Integer> doll = new ArrayDeque<>();
+
+        // step 2. 크레인을 움직인다.
+        for(int move : moves) {
+            // N칸에서 뽑자
+//            System.out.println("인형 뽑기 칸:" + move + "");
+            // N칸에 있는 인형 목록
+            ArrayDeque<Integer> NDoll = dollBoard.get(move);
+
+            // 인형이 비어있지않으면 크레인으로 뽑는다.
+            if(!NDoll.isEmpty()) {
+                // 크레인으로 인형 뽑기
+                int popDoll = NDoll.pop();
+//                System.out.println(move + "칸에서 뽑은인형=>" + popDoll + "");
+
+                // 인형 뽑기 바구니 확인하여 마지막 인형과 같은 인형을 뽑았다면
+                if(!doll.isEmpty() && doll.peek() == popDoll) {
+                    doll.pop();
+                    answer += 2;
+                }else {
+                    doll.push(popDoll);
+                }
+
+                dollBoard.put(move, NDoll);
+            }
+
+            // 인형 뽑기 바구니 확인
+//            System.out.println(doll);
+//            System.out.println("끝 dollBoard:" + dollBoard);
+//            System.out.println("======");
+        }
+
         return answer;
+    }
+
+    public static void dollInit(int[][] board, Map<Integer, ArrayDeque> dollBoard) {
+        int size = board.length;
+        for (int i = 0; i < size; i++) {
+            ArrayDeque doll = new ArrayDeque();
+            for (int j = size - 1; j >= 0; j--) {
+                if (board[j][i] != 0) {
+                    doll.push(board[j][i]);
+                }
+            }
+            // i칸 인형을 모두 만들었다.
+            dollBoard.put(i+1, doll);
+        }
     }
 }
