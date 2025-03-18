@@ -1,5 +1,9 @@
 package com.dogo;
 
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * author       : jangdoyun
  * date         : 25. 3. 11.
@@ -19,7 +23,7 @@ public class Lessons81303 {
     }
 
     /**
-     * 시간 : 60 min
+     * 시간 : 80 min
      * URL : https://school.programmers.co.kr/learn/courses/30/lessons/81303
      * 제목 : 표 편집
      * 문제 : 업무용 소프트웨어를 개발하는 니니즈웍스의 인턴인 앙몬드는 명령어 기반으로 표의 행을 선택, 삭제, 복구하는 프로그램을 작성하는 과제를 맡았습니다. 세부 요구 사항은 다음과 같습니다.
@@ -40,6 +44,92 @@ public class Lessons81303 {
      */
     public static String solution(int n, int k, String[] cmd) {
         String answer = "";
+
+        // n : 표의 행 개수
+        // k : 처음에 선택된 행의 위치
+        // cmd : 수행한 명령어들이 담긴 문자열
+
+        Map<Integer, Boolean> grid = new HashMap<>();
+
+        // grid 를 0 부터 n까지 초기화 시킨다. 모두 ture
+        for(int i = 0; i < n; i++) {
+            grid.put(i, true);
+        }
+
+        // 가장 최근에 삭제된 행의 위치
+        ArrayDeque<Integer> deletedRow = new ArrayDeque<>();
+
+        // 현재 행의 위치
+        int presentIndex = k;
+
+        // step 1. 명령어를 수행한다.
+        for(String cmd_ : cmd) {
+
+            // 어떤 명령어인지 파악한다.
+            String cmd_type = cmd_.substring(0, 1);
+            int cmd_num = -1;
+            if(cmd_type.equals("U") || cmd_type.equals("D")) {
+                cmd_num = Integer.parseInt(cmd_.substring(2));
+            }
+
+            // 명령어 수행
+            if(cmd_type.equals("U")) {
+                // 이동 명령어 만큼
+                while(cmd_num > 0) {
+                    // 이동할 수 있는지 체크
+
+                    // 맨 위로는 이동할 수 없으므로
+                    if(presentIndex == 0) {
+                        break;
+                    }
+
+                    // 위로 1칸 이동
+                    if(presentIndex != 0 && grid.get(presentIndex - 1)) {
+                        presentIndex -= 1;
+                        cmd_num -= 1;
+                    } else {
+                        presentIndex += 1;
+                    }
+                }
+
+            }else if(cmd_type.equals("D")) {
+                // 이동 명령어 만큼
+                while(cmd_num > 0) {
+                    // 이동할 수 있는지 체크
+
+                    // 맨 아래로는 이동할 수 없으므로
+                    if(presentIndex == n-1) {
+                        break;
+                    }
+
+                    // 위로 1칸 이동
+                    if(presentIndex != 0 && grid.get(presentIndex + 1)) {
+                        presentIndex += 1;
+                        cmd_num -= 1;
+                    } else {
+                        presentIndex += 1;
+                    }
+                }
+
+            }else if(cmd_type.equals("C")) {
+                // 현재 위치 삭제 후 삭제 스택에 저장
+                grid.put(presentIndex, false);
+                deletedRow.push(presentIndex);
+
+                // 현재 위치 조정
+                presentIndex += 1;
+                while(true) {
+
+                }
+
+            }else if (cmd_type.equals("Z")) {
+
+            }
+
+        }
+
+
         return answer;
     }
+
 }
