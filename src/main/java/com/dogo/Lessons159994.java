@@ -1,5 +1,7 @@
 package com.dogo;
 
+import java.util.ArrayDeque;
+
 /**
  * author       : jangdoyun
  * date         : 25. 3. 11.
@@ -42,6 +44,59 @@ public class Lessons159994 {
      */
     public static String solution(String[] cards1, String[] cards2, String[] goal) {
         String answer = "";
+
+        // goal에 도달하기위해 cards1 과 cards2에서 하나씩 꺼내서 goal에 있는 값과 비교하여 goal를 비워낼 수 있는지 체크
+
+        // cards1 과 cards2 초기화 goal 초기화
+        ArrayDeque<String> card1Queue = new ArrayDeque<>();
+        ArrayDeque<String> card2Queue = new ArrayDeque<>();
+        ArrayDeque<String> goalQueue = new ArrayDeque<>();
+        for(String card : cards1) {
+            card1Queue.offer(card);
+        }
+        for(String card : cards2) {
+            card2Queue.offer(card);
+        }
+        for(String card : goal) {
+            goalQueue.offer(card);
+        }
+
+        while(!goalQueue.isEmpty()) {
+
+            // goal, cards1, cards2 맨 앞에 있는 단어
+            String goalWord = goalQueue.peekFirst();
+
+            String card1Word = "";
+            if(!card1Queue.isEmpty()) {
+                card1Word = card1Queue.peekFirst();
+            }
+
+            String card2Word = "";
+            if(!card2Queue.isEmpty()) {
+                card2Word = card2Queue.peekFirst();
+            }
+
+            // 2개의 카드가 goalWord를 만족할 수 없다면 종료
+            if(!card1Word.equals(goalWord) && !card2Word.equals(goalWord)) {
+                break;
+            }
+
+            // card1에 있는 단어가 goalWord 를 만족한다면
+            if(card1Word.equals(goalWord)) {
+                goalQueue.poll();
+                card1Queue.poll();
+                continue;
+            }
+
+            // card2에 있는 단어가 goalWord 를 만족한다면
+            if(card2Word.equals(goalWord)) {
+                goalQueue.poll();
+                card2Queue.poll();
+            }
+        }
+
+        answer = goalQueue.isEmpty() ? "Yes" : "No";
+
         return answer;
     }
 }
