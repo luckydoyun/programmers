@@ -1,5 +1,7 @@
 package com.dogo;
 
+import java.util.*;
+
 /**
  * author       : jangdoyun
  * date         : 25. 3. 11.
@@ -13,7 +15,7 @@ public class Lessons92334 {
     public static void main(String[] args) {
 
         String[] id_list = {"muzi", "frodo", "apeach", "neo"};
-        String[] report = {"muzi frodo", "frodo neo", "neo apeach", "apeach muzi"};
+        String[] report = {"muzi frodo","apeach frodo","frodo neo","muzi neo","apeach muzi"};
         int k = 2;
         System.out.println("정답:" + solution(id_list, report, k));
     }
@@ -51,6 +53,45 @@ public class Lessons92334 {
         // k번 만큼 신고를 받으면 해당 유저는 정지가 된다.
         // 해당 유저가 정지되면 그 유저를 신고한 유저에게 정지 사실을 메일로 발송한다.
 
+        // 신고당한 유저와 그리고 그 유저를 신고한 유저를 관리한다. (중복신고를 막기위해)
+        Map<String, HashSet<String>> userSuspended = new HashMap<>();
+        // k번 이상 신고당한 유저는 이용이 정지되며, 그 유저를 신고한 유저에게 정지 사실을 메일로 발송해야한다.
+        Map<String, Integer> userOfferMap = new LinkedHashMap<>();
+        // 초기화
+        for(String id : id_list) {
+            userOfferMap.put(id, 0);
+        }
+
+        // report 데이터를 기반으로 신고리포트 정리
+        for(String reportData : report) {
+            String[] splitReportData = reportData.split(" ");
+            String offerId = splitReportData[0];
+            String suspendedId = splitReportData[1];
+
+            // 신고당한 기록이 없다면
+            if(!userSuspended.containsKey(suspendedId)) {
+                userSuspended.put(suspendedId, new HashSet<>(Set.of(offerId)));
+                continue;
+            }
+            // 신고당한 기록이 있다면 중복신고 체크
+            HashSet<String> offerIdList = userSuspended.get(suspendedId);
+            offerIdList.add(offerId);
+            userSuspended.put(suspendedId, offerIdList);
+        }
+
+        userSuspended.entrySet().stream().forEach(entry -> {
+            String offerId = entry.getKey();
+            HashSet<String> offerUserList = entry.getValue();
+
+            // k번 이상 신고당했는지 체크
+            if(offerUserList.size() >= k) {
+                for(String offerUser : offerUserList) {
+                    userOfferMap.put(offerUser, userOfferMap.get(offerUser) + 1);
+                }
+            }
+        });
+
+        answer = userOfferMap.values().stream().mapToInt(Integer::intValue).toArray();
 
         return answer;
     }
