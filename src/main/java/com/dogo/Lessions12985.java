@@ -9,7 +9,7 @@ package com.dogo;
  * -------------------------------
  * 25. 3. 11.  jangdoyun     최초 생성
  */
-public class Lession12985 {
+public class Lessions12985 {
     public static void main(String[] args) {
 
         int N = 8;
