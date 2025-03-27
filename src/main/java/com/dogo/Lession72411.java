@@ -1,5 +1,7 @@
 package com.dogo;
 
+import java.util.ArrayList;
+
 /**
  * author       : jangdoyun
  * date         : 25. 3. 11.
@@ -13,7 +15,7 @@ public class Lession72411 {
     public static void main(String[] args) {
 
         String[] orders = {"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"};
-        int[] course = {2,3,4};
+        int[] course = {2, 3, 4};
         System.out.println("정답:" + solution(orders, course));
     }
 
@@ -38,11 +40,45 @@ public class Lession72411 {
      * 배열의 각 원소에 저장된 문자열 또한 알파벳 오름차순으로 정렬되어야 합니다.
      * 만약 가장 많이 함께 주문된 메뉴 구성이 여러 개라면, 모두 배열에 담아 return 하면 됩니다.
      * orders와 course 매개변수는 return 하는 배열의 길이가 1 이상이 되도록 주어집니다.
+     *
      * @param
      * @return
      */
     public static String[] solution(String[] orders, int[] course) {
         String[] answer = {};
+
+        // 코스요리 메뉴는 최소 2가지 이상의 단품메뉴로 구성
+        // 최소 2명 이상의 손님으로부터 주문된 단품메뉴 조합에 대해서만 코스요리 메뉴 후보에 포함
+
+        // 코스요리 후보
+        ArrayList<String> result = new ArrayList<>();
+
+        // 추가하고 싶어하는 코스요리를 구성하는 단품메뉴들의 갯수
+        for (int i = 0; i < course.length; i++) {
+            // 단품메뉴들의 갯수
+            int course_menu_count = course[i];
+
+            // 단품메뉴들의 갯수에 맞는 코스요리 후보 뽑기
+            for (String order : orders) {
+                int index = 0;
+                int init = 0;
+
+                while (true) {
+                    if(index + course_menu_count > order.length()) {
+                        init += 1;
+                        index = init;
+                        continue;
+                    }
+                    String t = order.substring(index, index + course_menu_count);
+                    System.out.printf("t:%s\n", t);
+
+                    // 위치 변경
+                    index += 1;
+                }
+            }
+        }
+
+
         return answer;
     }
 }
