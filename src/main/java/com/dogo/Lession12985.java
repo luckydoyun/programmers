@@ -40,9 +40,37 @@ public class Lession12985 {
     {
         int answer = 0;
 
-        // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
-        System.out.println("Hello Java");
+        // 결승전 까지 경기가 계속 되며 n은 살아남은 참가자로 봐도 무방하다.
+        while(n != 1) {
+            // 경기가 시작되었으며, 라운드를 표기한다.
+            answer += 1;
+
+            // a가 속한 그룹
+            int group_a = groupCalc(a);
+            // b가 속한 그룹
+            int group_b = groupCalc(b);
+
+            // a와 b가 같은 그룹으로 만났다.
+            if(group_a == group_b) {
+                break;
+            }
+
+            // 라운드 종료
+            n /= 2;
+
+            // 참가번호 재할당
+            a = group_a;
+            b = group_b;
+        }
 
         return answer;
+    }
+
+    public static int groupCalc(int people) {
+        // 홀수라면 + 1
+        if (people % 2 != 0)
+            people += 1;
+
+        return people/2;
     }
 }
