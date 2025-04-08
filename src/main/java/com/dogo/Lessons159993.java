@@ -9,7 +9,7 @@ package com.dogo;
  * -------------------------------
  * 25. 3. 11.  jangdoyun     최초 생성
  */
-public class Lessions159993 {
+public class Lessons159993 {
     public static void main(String[] args) {
 
         String[] maps = {"SOOOL","XXXXO","OOOOO","OXXXX","OOOOE"};

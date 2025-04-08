@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * -------------------------------
  * 25. 3. 11.  jangdoyun     최초 생성
  */
-public class Lessions72411 {
+public class Lessons72411 {
     public static void main(String[] args) {
 
         String[] orders = {"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"};
